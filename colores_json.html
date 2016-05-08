@@ -71,10 +71,16 @@ and open the template in the editor.
                     btnAnadirColor.addEventListener("click",FormularioColores.intentarAnadirColor);
                 },
                 intentarAnadirColor: function(){
-
+                    var color = document.getElementById("input_color").value;
+                    Ajax.consultaHTTP("http://localhost/miAjax/colores_json.php",{color:color},FormularioColores.anadirColor);
                 },
                 anadirColor: function(color){
-
+                    console.log("[FormularioColores.anadirColor]");
+                    console.log(color);
+                    var inputList = document.getElementById("datalist_color");
+                    var nuevoOption = document.createElement("option");
+                    nuevoOption.setAttribute("value",color.color);
+                    inputList.appendChild(nuevoOption);
                 },
                 
             }

@@ -71,9 +71,27 @@ and open the template in the editor.
                     btnAnadirColor.addEventListener("click",FormularioColores.intentarAnadirColor);
                 },
                 intentarAnadirColor: function(){
-                    
+                    var color = document.getElementById("input_color").value;
+                    Ajax.consultaHTTP("http://localhost/miAjax/colores_xml.php?color="+color,FormularioColores.anadirColor);
                 },
                 anadirColor: function(color){
+                    console.log("[FormularioColores.anadirColor]");
+                    console.log(color);
+                
+                    var options = document.getElementsByTagName("option");
+                    for (var i=0;i< options.length;i++){
+                        options[i].parentNode.removeChild(options[i]);
+                    }
+                                        
+                    var inputList = document.getElementById("datalist_color");
+                    
+                    var colores = color.getElementsByTagName("color");
+                    for (var i=0;i<colores.length;i++){
+                        console.log("color:"+colores[i].textContent);
+                        var nuevoOption = document.createElement("option");
+                        nuevoOption.setAttribute("value",colores[i].textContent);
+                        inputList.appendChild(nuevoOption);    
+                    }
                     
                 },
                 
