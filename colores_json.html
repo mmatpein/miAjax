@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        
+        <div>
+            <input list="datalist_color"/>
+            <datalist id="datalist_color">
+            </datalist>
+        </div>
+        <input id="input_color" type="text"><button id="btn_anadir_color">Añadir color</button>
+        
+        <script type="text/javascript">    
+            var Ajax = {
+                httpRequest: false,
+                consultaHTTP: function(url,color,callback){
+                    this.callback = callback;
+                    if (window.XMLHttpRequest) { // Mozilla, Safari,...
+                        this.httpRequest = new XMLHttpRequest();
+                        if (this.httpRequest.overrideMimeType) {
+                            this.httpRequest.overrideMimeType('text/xml');
+                            // Ver nota sobre esta linea al final
+                        }
+                    } else if (window.ActiveXObject) { // IE
+                        try {
+                            this.httpRequest = new ActiveXObject("Msxml2.XMLHTTP");
+                        } catch (e) {
+                            try {
+                                this.httpRequest = new ActiveXObject("Microsoft.XMLHTTP");
+                            } catch (e) {}
+                        }
+                    }
+
+                    if (!this.httpRequest) {
+                        alert('Falla :( No es posible crear una instancia XMLHTTP');
+                        return false;
+                    }
+                    this.httpRequest.onreadystatechange = Ajax.recepcionHTTP;
+                    this.httpRequest.open('POST', url, true);
+                    this.httpRequest.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
+                    this.httpRequest.send(JSON.stringify(color));
+                },
+                recepcionHTTP: function() {
+                    console.log("[Ajax.recepcionHTTP]");
+                    console.log("readyState = " + Ajax.httpRequest.readyState);
+                    console.log("status = " + Ajax.httpRequest.status);
+                    if (Ajax.httpRequest.readyState == 4) {
+                        if (Ajax.httpRequest.status == 200) {
+                            console.log(Ajax.httpRequest.responseText);
+                            //Ajax.callback(Ajax.httpRequest.responseXML);
+                            Ajax.callback(JSON.parse(Ajax.httpRequest.responseText));
+                        } else {
+                            alert('Hubo problemas con la petición.');
+                        }
+                    }
+                }
+            };
+            
+            var FormularioColores = {
+                init: function(){
+                    var btnAnadirColor = document.getElementById("btn_anadir_color");
+                    btnAnadirColor.addEventListener("click",FormularioColores.intentarAnadirColor);
+                },
+                intentarAnadirColor: function(){
+
+                },
+                anadirColor: function(color){
+
+                },
+                
+            }
+            
+            
+            FormularioColores.init();
+        </script>
+        
+    </body>
+</html>
