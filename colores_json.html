@@ -69,14 +69,42 @@ and open the template in the editor.
                 init: function(){
                     var btnAnadirColor = document.getElementById("btn_anadir_color");
                     btnAnadirColor.addEventListener("click",FormularioColores.intentarAnadirColor);
+                    this.intentarDescargarColores();
                 },
                 intentarAnadirColor: function(){
-
+                    var color = document.getElementById("input_color").value;
+                    var tonalidad = "clara";
+                    Ajax.consultaHTTP("http://localhost/miAjax/colores_json.php",
+                                      {color: color},
+                                       FormularioColores.anadirColor);
                 },
-                anadirColor: function(color){
-
+                anadirColor: function(objetoColor){
+                    console.log(objetoColor);
+                    if (objetoColor.hasOwnProperty("color")){
+                        var color = objetoColor.color;
+                        var optionDOM = document.createElement("option");
+                        optionDOM.setAttribute("value",color);
+                        document.getElementById("datalist_color").appendChild(optionDOM);
+                    } else {
+                        alert(objetoColor.error);
+                    }
                 },
-                
+                intentarDescargarColores: function(){
+                    Ajax.consultaHTTP("http://localhost/miAjax/colores_json.php",
+                                      {colores: "todos"},
+                                      FormularioColores.cargarColores);
+                },
+                cargarColores: function(objetoColores){
+                    /*
+                     * {colores: [Rojo, Verde, Azul, Amarillo]}                    * 
+                     */
+                    console.log(objetoColores);
+                    var colores = objetoColores.colores;
+                    for (var i=0;i<colores.length;i++){
+                        var unColor = colores[i];
+                        FormularioColores.anadirColor({color:unColor});
+                    }
+                }
             }
             
             
